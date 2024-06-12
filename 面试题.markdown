@@ -68,6 +68,10 @@ docker run --cpus="2.0" my_image
 
 轻量级的Linux镜像，体积小，启动快
 
+## dockerignore
+
+适用于dockerfile里的COPY和ADD命令，去忽略隐藏文件，temp目录，.git，node_modules
+
 ## overlay
 
 
