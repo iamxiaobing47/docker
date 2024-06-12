@@ -1,0 +1,73 @@
+## 讲解docker restart
+
+- `no`：容器不会自动重启。
+- `always`：容器总是在退出时重启。
+- `on-failure`：仅当容器以非零状态退出时才重启。
+
+1. **设置容器总是重启**：
+   ```bash
+   docker run --restart=always my_image
+   ```
+
+2. **设置容器在失败时重启，最多尝试3次**：
+   ```bash
+   docker run --restart=on-failure:3 my_image
+   ```
+
+3. **设置容器在退出时不自动重启**：
+   ```bash
+   docker run --restart=no my_image
+   ```
+   
+
+## CMD和ENTRYPOINT的区别
+
+- CMD 可以提供容器默认执行的命令，这个命令可以被 docker run 命令行中的参数覆盖
+- ENTRYPOINT 不会被覆盖
+- 当 CMD 和 ENTRYPOINT 同时存在时，CMD 中的命令会作为参数传递给 ENTRYPOINT
+
+## mount 和 volume
+
+- mount是将docker容器里的数据存储在host里，默认位置是/var/lib/docker/volumes/mountname
+- volume是将host的文件或者目录映射在docker内部
+- 写法的区别点是，写host目录时是否带根目录/
+
+## docker kill和stop的区别
+
+- docker kill是强制关闭，可能导致数据丢失和文件损坏
+- docker stop是向容器发送关闭信号，容器会做一些清理工作，关闭连接，报错状态然后再关闭
+
+## 如何更改 Docker 的默认存储设置？
+Docker 的默认存放位置是/var/lib/docker,如果希望将 Docker 的本地文件存储到其他分区，可以使用 Linux 软连接的方式来做
+
+## 请解释Docker镜像和容器的区别
+镜像是基础，是只读的。而容器是运行的实例，可以修改
+
+
+## ONBUILD
+
+ONBUILD只有在它作为基础镜像，然后基础镜像被其他dockerfile用FROM引用的时候才会执行
+
+## 如何限制一个容器的CPU和内存使用？
+
+```shell
+docker run -m 512m my_image
+docker run --cpus="2.0" my_image
+```
+
+
+## Docker的多阶段构建是什么？它的优势是什么？
+
+它允许你将 Dockerfile 分为多个阶段，每个阶段可以独立地构建、执行命令，并且只保留最终需要的文件和依赖项到最终的镜像中
+
+- 减少最终镜像大小：通过只将运行时必需的文件复制到最终镜像，可以显著减小镜像的大小。 
+- 避免泄露构建依赖：构建依赖只在构建阶段使用，不会包含在最终的镜像中，这有助于保护源代码和构建过程中使用的私有库
+- 缓存优化：Docker 可以更有效地利用构建缓存，因为每个阶段的构建结果都可以作为后续阶段的缓存
+
+## alpine
+
+轻量级的Linux镜像，体积小，启动快
+
+## overlay
+
+

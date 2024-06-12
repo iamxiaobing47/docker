@@ -1,0 +1,49 @@
+Dockerfile 的使用流程通常如下：
+
+1. 编写 Dockerfile：在项目根目录下创建一个 Dockerfile。
+2. 构建镜像：使用 `docker build` 命令和 Dockerfile 构建镜像。
+3. 运行容器：使用 `docker run` 命令从镜像启动容器。
+4. **FROM** - 指定基础镜像
+5. **WORKDIR** - 指定工作目录
+6. **ENV** - 设置环境变量。
+7. **EXPOSE** - 声明容器运行时监听的端口，不用于端口映射。
+8. **ADD** - 将文件从构建上下文目录复制到容器中，且会自动处理URL和tar
+9. **COPY** - 类似于 ADD，但不支持自动解压缩。
+10. **RUN** - 执行命令，通常用于安装软件包
+11. **VOLUME** - 创建一个可以从本地主机或其他容器挂载的挂载点。
+12. **ENTRYPOINT** - 配置容器启动时执行的命令，不可被用户覆盖
+13. **CMD** - 容器启动时执行的命令，可以被用户覆盖
+    当指定`ENTRYPOINT` 时，CMD就不再是运行命令，而是将CMD的参数传递给`ENTRYPOINT`，且参数会被docker run后的参数覆盖。用于变参
+14. **USER** - 设置运行容器时的用户名或 UID。
+15. **ARG** - 定义构建时的变量，可以在构建时通过 `docker build` 命令的 `--build-arg` 标志进行设置
+
+Dockerfile 的示例：
+
+
+docker image prune
+
+```Dockerfile
+# 使用官方的 Node.js 镜像作为基础镜像
+FROM node:14
+
+# 设置工作目录
+WORKDIR /usr/src/app
+
+# 复制 package.json 和 package-lock.json
+COPY package*.json ./
+
+# 安装项目依赖
+RUN npm install
+
+# 复制项目文件到容器
+COPY . .
+
+# 对外暴露端口
+EXPOSE 8080
+
+# 设置环境变量
+ENV NAME World
+
+# 定义启动命令
+CMD ["node", "app.js"]
+```

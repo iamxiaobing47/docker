@@ -1,0 +1,56 @@
+Create mysql container
+
+```
+docker run -d \
+--name mysql \
+-p 3308:3306 \
+-e MYSQL_ROOT_PASSWORD=777888999a \
+-v /Users/xiaobing/Desktop/data/mysql/log:/var/log/mysql \
+-v /Users/xiaobing/Desktop/data/mysql/data:/var/lib/mysql \
+-v /Users/xiaobing/Desktop/data/mysql/conf:/etc/mysql/conf.d \
+mysql
+```
+
+Make charset utf-8
+
+```shell
+vim data/mysql/conf/my.cnf
+
+[client]
+default-character-set=utf8
+ 
+[mysql]
+default-character-set=utf8
+ 
+[mysqld]
+init_connect='SET collation_connection = utf8_unicode_ci'
+init_connect='SET NAMES utf8'
+character-set-server=utf8
+collation-server=utf8_unicode_ci
+```
+
+```shell
+SHOW VARIABLES LIKE 'character%'
+```
+
+Restart
+
+```shell
+restart mysql
+```
+
+Login to Mysql
+
+```shell
+mysql -uroot -p
+```
+
+Create data
+
+```shell
+create table test(id int, name varchar(10));
+
+insert into test value(1,'卷饼');
+
+select * from test;
+```
